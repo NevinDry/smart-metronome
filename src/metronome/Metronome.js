@@ -11,9 +11,12 @@ class Metronome extends Component {
       running: false,
       bpm: 90,
       beatSlashMeasure: 4,
-      playIntervalBeats: true
+      playIntervalBeats: true,
+      increaseBpm: 10,
+      increaseAtMeasure: 4
     };
 
+    this.measureCount = 0;
     this.audioContext = null;
     this.nextClickTime = 0.0;
     this.flashForward = 25.0;
@@ -29,6 +32,12 @@ class Metronome extends Component {
 
     this.currentBeat++;
     if (this.currentBeat === this.state.beatSlashMeasure) {
+      this.measureCount++;
+      if(this.measureCount % this.state.increaseAtMeasure === 0){
+        const increaseBy = this.state.bpm + this.state.increaseBpm;
+        this.setState({ bpm: increaseBy });
+      }
+
       this.currentBeat = 0;
     }
   }
@@ -39,7 +48,7 @@ class Metronome extends Component {
     let isFirstBeatMesure = this.currentBeat % this.state.beatSlashMeasure === 0;
 
     if (isFirstBeatMesure) {
-      this.osc.frequency.value = 1200.0;
+      this.osc.frequency.value = 1200.0;  
     } else if (this.state.playIntervalBeats) {
       this.osc.frequency.value = 220.0;
     }
@@ -88,7 +97,7 @@ class Metronome extends Component {
       btnText = "Start";
     }
 
-    const { bpm, beatSlashMeasure, playIntervalBeats } = this.state;
+    const { bpm, beatSlashMeasure, playIntervalBeats,increaseBpm, increaseAtMeasure } = this.state;
 
     return (
       <div className="metronome">
@@ -128,9 +137,14 @@ class Metronome extends Component {
               </svg>
             </label>
             <span>Play Beats ?</span>
-
           </div>
         </div>
+
+
+      increase by <input type="text" value={increaseBpm} onChange={this.increaseBpmChange} />  every               <input type="text" value={increaseAtMeasure} onChange={this.increaseAtMeasureChange} />
+
+
+
       </div>
 
     );
@@ -145,7 +159,6 @@ class Metronome extends Component {
       this.osc.stop(this.audioContext.currentTime);
     }
 
-
     // getting the value of running in this context
     const running = !this.state.running;
 
@@ -156,6 +169,7 @@ class Metronome extends Component {
 
     if (running) {
       this.currentBeat = 0;
+      this.measureCount = 0;
       this.nextClickTime = this.audioContext.currentTime;
       this.metronomeWorker.postMessage("start");
     } else {
@@ -178,6 +192,16 @@ class Metronome extends Component {
     const playIntervalBeats = !this.state.playIntervalBeats;
     this.setState({ playIntervalBeats });
   }
+
+  increaseBpmChange = (event) => {
+    const increaseBpm = +event.target.value;
+    this.setState({ increaseBpm });
+  } 
+
+  increaseAtMeasureChange = (event) => {
+    const increaseAtMeasure = +event.target.value;
+    this.setState({ increaseAtMeasure });
+  } 
 
 }
 
