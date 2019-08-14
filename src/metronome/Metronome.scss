@@ -1,0 +1,82 @@
+.settings-container{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.btn {
+    transition: background 600ms;
+    width: 100%;
+    font-size: 2.5rem;
+    color: white;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: middle;
+    text-decoration: none;
+    padding: 15px 30px;
+    cursor: pointer;
+    border-width: 0;
+    outline: none;
+    border-radius: 35px;
+}
+
+.btn-start {
+    background: var(--primary-color);
+}
+
+.btn-stop {
+    background: var(--danger-color);
+}
+
+.range-container {
+    width: 100%;
+    border-radius: 10px;
+    margin: 70px auto 15px auto;
+    height: 10px;
+    padding-top: 6px;
+    border: 1px solid #CECECE;
+}
+
+.range-container .range {
+    width: 96%;
+    background-color: var(--secondary-color);
+    margin: 0 auto;
+    display: block;
+    border-radius: 10px;
+}
+
+input[type="range"] {
+    outline:0;
+    -webkit-appearance: none;
+    background-color: black;
+    height: 5px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;
+    top: 0px;
+    z-index: 1;
+    width: 35px;
+    height: 35px;
+    border-radius: 40px;
+    background-color: var(--primary-color);
+    border: 1px solid #CECECE;
+}
+
+.bpm-container {
+    font-size: 2.5rem;
+
+    & input[type="text"] {
+        font-size: 2.5rem;
+        margin: 5px;
+        padding: 10px;
+        width: 70px;
+        border-radius: 10px;
+        border: 2px solid var(--primary-color);
+        box-shadow: 1px 2px 3px rgba(0,0,0,0.4);
+        font-family: 'Luckiest Guy', cursive;
+    }
+}
+

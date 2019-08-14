@@ -1,5 +1,5 @@
 {
-  "short_name": "Smart Metronome",
+  "short_name": "Smart Metro",
   "name": "Smart Metronome",
   "icons": [
     {
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#8FCF3C",
-  "background_color": "#8FCF3C"
+  "theme_color": "hsl(141, 71%, 48%)",
+  "background_color": "hsl(141, 71%, 48%)"
 }
