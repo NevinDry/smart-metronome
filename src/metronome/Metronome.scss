@@ -1,4 +1,4 @@
-.settings-container{
+.settings-container {
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -7,7 +7,6 @@
 .btn {
     transition: background 600ms;
     width: 100%;
-    font-size: 2.5rem;
     color: white;
     -webkit-appearance: none;
     box-sizing: border-box;
@@ -19,6 +18,8 @@
     border-width: 0;
     outline: none;
     border-radius: 35px;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .btn-start {
@@ -47,7 +48,7 @@
 }
 
 input[type="range"] {
-    outline:0;
+    outline: 0;
     -webkit-appearance: none;
     background-color: black;
     height: 5px;
@@ -66,17 +67,81 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .bpm-container {
-    font-size: 2.5rem;
+    display: flex;
+    flex-direction: column;
 
     & input[type="text"] {
+        outline: 0;
         font-size: 2.5rem;
         margin: 5px;
         padding: 10px;
         width: 70px;
         border-radius: 10px;
         border: 2px solid var(--primary-color);
-        box-shadow: 1px 2px 3px rgba(0,0,0,0.4);
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.4);
         font-family: 'Luckiest Guy', cursive;
+    };
+
+    & div:first-child{
+        text-align: center;
     }
 }
 
+.bpm-container span{
+    display: inline-flex;
+    align-items: center;
+}
+
+.checkbox-beats{
+    display: flex;
+}
+
+.checkbox-beats span{
+    display: inline-flex;
+    align-items: center;
+}
+
+.checkbox-beats input#check {
+    position: absolute;
+    opacity: 0;
+
+    &:checked+label svg path {
+        stroke-dashoffset: 101;
+    }
+
+    &:focus+label {
+        transform: scale(1.03);
+    }
+}
+
+.checkbox-beats #check+label {
+    width: 90px; 
+    height: 70px;  
+    display: inline-block;
+    border: 2px solid var(--primary-color);
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.4);
+    margin: 5px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all .2s ease;
+
+    &:active {
+        transform: scale(1.05);
+        border-radius: 30px;
+    }
+
+    svg {
+        pointer-events: none;
+
+        path {
+            fill: none;
+            stroke: var(--secondary-color);
+            stroke-width: 8px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 0;
+            transition: all 350ms cubic-bezier(1, 0, .37, .91);
+        }
+    }
+}

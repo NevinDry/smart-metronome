@@ -35,16 +35,19 @@
 }
 
 
-@media screen and (min-width: 769px) {
+@media screen and (min-width: 991.98px) {
   .App {
     margin: auto;
-    width: 30%;
+    width: 40%;
+    font-size: 2.5rem;
   }
 }
 
-@media screen and (max-width: 769px) {
+@media screen and (max-width: 991.98px) {
   .App {
     width: initial;
     padding: 0 10px 0 10px;
+    font-size: 1.5rem;
+
   }
 }
