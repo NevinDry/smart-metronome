@@ -4,24 +4,6 @@
     text-align: left;
 }
 
-.btn {
-    transition: background 600ms;
-    width: 100%;
-    color: white;
-    -webkit-appearance: none;
-    box-sizing: border-box;
-    display: inline-block;
-    vertical-align: middle;
-    text-decoration: none;
-    padding: 15px 30px;
-    cursor: pointer;
-    border-width: 0;
-    outline: none;
-    border-radius: 35px;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
 .btn-start {
     background: var(--primary-color);
 }
