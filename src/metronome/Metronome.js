@@ -10,6 +10,8 @@ class Metronome extends Component {
     this.state = {
       running: false,
       bpm: 90,
+      frqMain: 1200,
+      frqBeat: 220,
       beatSlashMeasure: 4,
       playIntervalBeats: true,
       increaseBpm: 0,
@@ -48,9 +50,9 @@ class Metronome extends Component {
     let isFirstBeatMesure = this.currentBeat % this.state.beatSlashMeasure === 0;
 
     if (isFirstBeatMesure) {
-      this.osc.frequency.value = 1200.0;
+      this.osc.frequency.value = this.state.frqMain;
     } else if (this.state.playIntervalBeats) {
-      this.osc.frequency.value = 220.0;
+      this.osc.frequency.value = this.state.frqBeat;
     }
 
     if (this.state.playIntervalBeats || isFirstBeatMesure) {
@@ -97,7 +99,7 @@ class Metronome extends Component {
       btnText = "Start";
     }
 
-    const { bpm, beatSlashMeasure, playIntervalBeats, increaseBpm, increaseAtMeasure } = this.state;
+    const { bpm, beatSlashMeasure, playIntervalBeats, increaseBpm, increaseAtMeasure, frqMain, frqBeat } = this.state;
 
     return (
       <div className="metronome">
@@ -116,9 +118,6 @@ class Metronome extends Component {
               onChange={this.bpmChange}
             />
           </div>
-
-
-
           <div className='bpm-container'>
             <div>
               <input type="text" value={bpm} onChange={this.bpmChange}></input>
@@ -144,7 +143,39 @@ class Metronome extends Component {
           <div>
             increase by <input type="text" value={increaseBpm} onChange={this.increaseBpmChange} /> bpm <br />
             every <input type="text" value={increaseAtMeasure} onChange={this.increaseAtMeasureChange} /> measure
-        </div>
+          </div>
+          <div class="frequency-container">
+            <div className="range-container">
+              <input
+                type="range"
+                className="range"
+                min="20"
+                max="2000"
+                step="1"
+                value={frqMain}
+                onChange={this.frqMainChange}
+              />
+            </div>
+            <div>
+              <input type="text" value={frqMain} onChange={this.frqMainChange}></input>
+              <span>First Beat Frq</span>
+            </div>
+            <div className="range-container">
+              <input
+                type="range"
+                className="range"
+                min="20"
+                max="2000"
+                step="1"
+                value={frqBeat}
+                onChange={this.frqBeatChange}
+              />
+            </div>
+            <div>
+              <input type="text" value={frqBeat} onChange={this.frqBeatChange}></input>
+              <span>Beat Frq</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -202,6 +233,16 @@ class Metronome extends Component {
   increaseAtMeasureChange = (event) => {
     const increaseAtMeasure = +event.target.value;
     this.setState({ increaseAtMeasure });
+  }
+
+  frqMainChange = (event) => {
+    const frqMain = +event.target.value;
+    this.setState({ frqMain });
+  }
+
+  frqBeatChange = (event) => {
+    const frqBeat = +event.target.value;
+    this.setState({ frqBeat });
   }
 
 }
