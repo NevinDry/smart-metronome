@@ -66,21 +66,21 @@ input[type="range"]::-webkit-slider-thumb {
     border: 1px solid #CECECE;
 }
 
+input[type="text"] {
+    outline: 0;
+    font-size: 2.5rem;
+    margin: 5px;
+    padding: 10px;
+    width: 70px;
+    border-radius: 10px;
+    border: 2px solid var(--primary-color);
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.4);
+    font-family: 'Luckiest Guy', cursive;
+};
+
 .bpm-container {
     display: flex;
     flex-direction: column;
-
-    & input[type="text"] {
-        outline: 0;
-        font-size: 2.5rem;
-        margin: 5px;
-        padding: 10px;
-        width: 70px;
-        border-radius: 10px;
-        border: 2px solid var(--primary-color);
-        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.4);
-        font-family: 'Luckiest Guy', cursive;
-    };
 
     & div:first-child{
         text-align: center;

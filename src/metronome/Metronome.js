@@ -12,7 +12,7 @@ class Metronome extends Component {
       bpm: 90,
       beatSlashMeasure: 4,
       playIntervalBeats: true,
-      increaseBpm: 10,
+      increaseBpm: 0,
       increaseAtMeasure: 4
     };
 
@@ -33,7 +33,7 @@ class Metronome extends Component {
     this.currentBeat++;
     if (this.currentBeat === this.state.beatSlashMeasure) {
       this.measureCount++;
-      if(this.measureCount % this.state.increaseAtMeasure === 0){
+      if (this.measureCount % this.state.increaseAtMeasure === 0) {
         const increaseBy = this.state.bpm + this.state.increaseBpm;
         this.setState({ bpm: increaseBy });
       }
@@ -48,7 +48,7 @@ class Metronome extends Component {
     let isFirstBeatMesure = this.currentBeat % this.state.beatSlashMeasure === 0;
 
     if (isFirstBeatMesure) {
-      this.osc.frequency.value = 1200.0;  
+      this.osc.frequency.value = 1200.0;
     } else if (this.state.playIntervalBeats) {
       this.osc.frequency.value = 220.0;
     }
@@ -97,7 +97,7 @@ class Metronome extends Component {
       btnText = "Start";
     }
 
-    const { bpm, beatSlashMeasure, playIntervalBeats,increaseBpm, increaseAtMeasure } = this.state;
+    const { bpm, beatSlashMeasure, playIntervalBeats, increaseBpm, increaseAtMeasure } = this.state;
 
     return (
       <div className="metronome">
@@ -117,34 +117,35 @@ class Metronome extends Component {
             />
           </div>
 
+
+
           <div className='bpm-container'>
             <div>
               <input type="text" value={bpm} onChange={this.bpmChange}></input>
               <span>BPM</span>
             </div>
             <br></br>
+            <div className="checkbox-beats">
+              <input type="checkbox" id="check" value={playIntervalBeats} onChange={this.playIntervalBeatsChange} />
+              <label htmlFor="check">
+                <svg viewBox="0,0,55,50">
+                  <path d="M5 30 L 20 45 L 45 5"></path>
+                </svg>
+              </label>
+              <span>Play Beats ?</span>
+            </div>
             <div>
               <input type="text" value={beatSlashMeasure} onChange={this.beatSlashMeasureChange}>
               </input>
               <span>B/Measure</span>
             </div>
           </div>
-          <div className="checkbox-beats">
-            <input type="checkbox" id="check" value={playIntervalBeats} onChange={this.playIntervalBeatsChange} />
-            <label htmlFor="check">
-              <svg viewBox="0,0,55,50">
-                <path d="M5 30 L 20 45 L 45 5"></path>
-              </svg>
-            </label>
-            <span>Play Beats ?</span>
-          </div>
+
+          <div>
+            increase by <input type="text" value={increaseBpm} onChange={this.increaseBpmChange} /> bpm <br />
+            every <input type="text" value={increaseAtMeasure} onChange={this.increaseAtMeasureChange} /> measure
         </div>
-
-
-      increase by <input type="text" value={increaseBpm} onChange={this.increaseBpmChange} />  every               <input type="text" value={increaseAtMeasure} onChange={this.increaseAtMeasureChange} />
-
-
-
+        </div>
       </div>
 
     );
@@ -196,12 +197,12 @@ class Metronome extends Component {
   increaseBpmChange = (event) => {
     const increaseBpm = +event.target.value;
     this.setState({ increaseBpm });
-  } 
+  }
 
   increaseAtMeasureChange = (event) => {
     const increaseAtMeasure = +event.target.value;
     this.setState({ increaseAtMeasure });
-  } 
+  }
 
 }
 
