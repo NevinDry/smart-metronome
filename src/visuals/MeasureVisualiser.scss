@@ -1,0 +1,20 @@
+.full-circle{
+    background-color: var(--primary-color);
+}
+
+.empty-circle{
+    background-color: white;
+}
+
+.circle-visual-container{
+    width: 100%;
+}
+
+.circle-visual-container div{
+    display: inline-block;
+    margin: 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 15px;
+    border: solid 1px var(--primary-color);
+}

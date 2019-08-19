@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Metronome.scss';
 import WebWorker from '../WebWorker';
 import metronomeWorker from './metronomeWorker.js';
+import MeasureVisualiser from '../visuals/MeasureVisualiser.js'
 
 class Metronome extends Component {
 
@@ -15,10 +16,10 @@ class Metronome extends Component {
       beatSlashMeasure: 4,
       playIntervalBeats: true,
       increaseBpm: 0,
-      increaseAtMeasure: 4
+      increaseAtMeasure: 4,
+      measureCount: 0
     };
 
-    this.measureCount = 0;
     this.audioContext = null;
     this.nextClickTime = 0.0;
     this.flashForward = 25.0;
@@ -34,8 +35,9 @@ class Metronome extends Component {
 
     this.currentBeat++;
     if (this.currentBeat === this.state.beatSlashMeasure) {
-      this.measureCount++;
-      if (this.measureCount % this.state.increaseAtMeasure === 0) {
+      this.setState({ measureCount: this.state.measureCount + 1 });
+      
+      if (this.state.measureCount % this.state.increaseAtMeasure === 0) {
         const increaseBy = this.state.bpm + this.state.increaseBpm;
         this.setState({ bpm: increaseBy });
       }
@@ -104,6 +106,8 @@ class Metronome extends Component {
     return (
       <div className="metronome">
 
+        <MeasureVisualiser measureLength={this.state.increaseAtMeasure} measureCount={this.state.measureCount}></MeasureVisualiser>
+
         <button onClick={this.startStop} className={btnClass}>{btnText}</button>
 
         <div className="settings-container">
@@ -144,7 +148,7 @@ class Metronome extends Component {
             increase by <input type="text" value={increaseBpm} onChange={this.increaseBpmChange} /> bpm <br />
             every <input type="text" value={increaseAtMeasure} onChange={this.increaseAtMeasureChange} /> measure
           </div>
-          <div class="frequency-container">
+          <div className="frequency-container">
             <div className="range-container">
               <input
                 type="range"
@@ -201,7 +205,7 @@ class Metronome extends Component {
 
     if (running) {
       this.currentBeat = 0;
-      this.measureCount = 0;
+      this.setState({ measureCount: 0 });
       this.nextClickTime = this.audioContext.currentTime;
       this.metronomeWorker.postMessage("start");
     } else {
