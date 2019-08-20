@@ -19,8 +19,13 @@ class MobileToast extends Component {
         return (
             <div id="snackbar" className={this.state.show ? 'show' : ''}>
                 A new update is avaible, please hard reload the app
-            <button onClick={() => { this.setState({ show: false }) }}>  CLOSE </button>
+            <button onClick={this.updateApp}>  OK </button>
             </div>);
+    }
+
+    updateApp = () => {
+        this.setState({ show: false });
+        window.location.reload(true);
     }
 }
 

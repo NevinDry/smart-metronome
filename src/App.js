@@ -11,6 +11,7 @@ class App extends Component {
     super(props);
     this.state = {
       updateToast: false,
+      notInstalled: false
     };
   }
 
@@ -28,8 +29,9 @@ class App extends Component {
     let instaMessage;
     if (iOS) {
       dialog = (<MobileDialog />);
-      if (('standalone' in window.navigator) && (window.navigator.standalone)) {
-        instaMessage = (<MobileIosInstallMessage />)
+      //checking if app is installed or not
+      if (!window.navigator.standalone) {
+        instaMessage = (<MobileIosInstallMessage />);
       }
     }
 
