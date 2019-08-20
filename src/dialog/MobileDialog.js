@@ -25,10 +25,7 @@ class MobileDialog extends Component {
                     </div>
                 </div>
             );
-        } else {
-            return "";
         }
-
     }
 }
 

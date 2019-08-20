@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './assets/logo.svg';
 import './App.scss';
 import Metronome from './metronome/Metronome';
 import MobileDialog from './dialog/MobileDialog'
 import MobileToast from './toast/MobileToast'
-
+import MobileIosInstallMessage from './installMessage/MobileIosInstallMessage';
 
 class App extends Component {
   constructor(props) {
@@ -22,13 +22,16 @@ class App extends Component {
   }
 
   render() {
+    // Preparing for IOS PWA integration
     let iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
     let dialog;
+    let instaMessage;
     if (iOS) {
       dialog = (<MobileDialog />);
+      if (('standalone' in window.navigator) && (window.navigator.standalone)) {
+        instaMessage = (<MobileIosInstallMessage />)
+      }
     }
-
-
 
     return (
       <div>
@@ -40,7 +43,7 @@ class App extends Component {
           <Metronome />
         </div>
         <MobileToast show={this.state.updateToast} />
-
+        {instaMessage}
       </div>
 
     );
