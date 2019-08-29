@@ -3,6 +3,7 @@ import './MeasureVisualiser.scss';
 
 
 class MeasureVisualiser extends Component {
+    
     render() {
         const measures = [];
 

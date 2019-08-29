@@ -3,6 +3,7 @@ import './Metronome.scss';
 import WebWorker from '../WebWorker';
 import metronomeWorker from './metronomeWorker.js';
 import MeasureVisualiser from '../visuals/MeasureVisualiser.js'
+import BounceVisualiser from '../visuals/BounceVisualiser.js'
 
 class Metronome extends Component {
 
@@ -22,7 +23,6 @@ class Metronome extends Component {
 
     this.audioContext = null;
     this.nextClickTime = 0.0;
-    this.flashForward = 25.0;
     this.scheduleAheadTime = 0.1;
     this.currentBeat = 0;
     this.metronomeWorker = new WebWorker(metronomeWorker);
@@ -30,13 +30,13 @@ class Metronome extends Component {
   }
 
   nextClick = () => {
-    // Adjusting time 
-    this.nextClickTime += (this.flashForward / 100) * (60.0 / this.state.bpm);
+    // Adjusting time using number of beat per measure and bpm
+    this.nextClickTime += ((100 / this.state.beatSlashMeasure) / 100) * (60.0 / this.state.bpm);
 
     this.currentBeat++;
     if (this.currentBeat === this.state.beatSlashMeasure) {
       this.setState({ measureCount: this.state.measureCount + 1 });
-      
+
       if (this.state.measureCount % this.state.increaseAtMeasure === 0) {
         const increaseBy = this.state.bpm + this.state.increaseBpm;
         this.setState({ bpm: increaseBy });
@@ -86,7 +86,7 @@ class Metronome extends Component {
         console.log("worker message: " + e.data);
     };
 
-    this.metronomeWorker.postMessage({ "interval": this.flashForward });
+    this.metronomeWorker.postMessage({ "interval": (100 / this.state.beatSlashMeasure) });
   };
 
   render() {
@@ -104,85 +104,88 @@ class Metronome extends Component {
     const { bpm, beatSlashMeasure, playIntervalBeats, increaseBpm, increaseAtMeasure, frqMain, frqBeat } = this.state;
 
     return (
-      <div className="metronome">
+      <div>
+        <BounceVisualiser beatNumber={this.state.measureCount} animationDuration={(60.0 / this.state.bpm)} measureQuantity={this.state.increaseAtMeasure} />
 
-        <MeasureVisualiser measureLength={this.state.increaseAtMeasure} measureCount={this.state.measureCount}></MeasureVisualiser>
+        <div className="metronome">
 
-        <button onClick={this.startStop} className={btnClass}>{btnText}</button>
+          <MeasureVisualiser measureLength={this.state.increaseAtMeasure} measureCount={this.state.measureCount}></MeasureVisualiser>
 
-        <div className="settings-container">
-          <div className="range-container">
-            <input
-              type="range"
-              className="range"
-              min="20"
-              max="240"
-              step="1"
-              value={bpm}
-              onChange={this.bpmChange}
-            />
-          </div>
-          <div className='bpm-container'>
-            <div>
-              <input type="text" value={bpm} onChange={this.bpmChange}></input>
-              <span>BPM</span>
-            </div>
-            <br></br>
-            <div className="checkbox-beats">
-              <input type="checkbox" id="check" value={playIntervalBeats} onChange={this.playIntervalBeatsChange} />
-              <label htmlFor="check">
-                <svg viewBox="0,0,55,50">
-                  <path d="M5 30 L 20 45 L 45 5"></path>
-                </svg>
-              </label>
-              <span>Play Beats ?</span>
-            </div>
-            <div>
-              <input type="text" value={beatSlashMeasure} onChange={this.beatSlashMeasureChange}>
-              </input>
-              <span>B/Measure</span>
-            </div>
-          </div>
+          <button onClick={this.startStop} className={btnClass}>{btnText}</button>
 
-          <div>
-            increase by <input type="text" value={increaseBpm} onChange={this.increaseBpmChange} /> bpm <br />
-            every <input type="text" value={increaseAtMeasure} onChange={this.increaseAtMeasureChange} /> measure
-          </div>
-          <div className="frequency-container">
+          <div className="settings-container">
             <div className="range-container">
               <input
                 type="range"
                 className="range"
                 min="20"
-                max="2000"
+                max="240"
                 step="1"
-                value={frqMain}
-                onChange={this.frqMainChange}
+                value={bpm}
+                onChange={this.bpmChange}
               />
             </div>
-            <div>
-              <input type="text" value={frqMain} onChange={this.frqMainChange}></input>
-              <span>First Beat Frq</span>
+            <div className='bpm-container'>
+              <div>
+                <input type="text" value={bpm} onChange={this.bpmChange}></input>
+                <span>BPM</span>
+              </div>
+              <br></br>
+              <div className="checkbox-beats">
+                <input type="checkbox" id="check" value={playIntervalBeats} onChange={this.playIntervalBeatsChange} />
+                <label htmlFor="check">
+                  <svg viewBox="0,0,55,50">
+                    <path d="M5 30 L 20 45 L 45 5"></path>
+                  </svg>
+                </label>
+                <span>Play Beats ?</span>
+              </div>
+              <div>
+                <input type="text" value={beatSlashMeasure} onChange={this.beatSlashMeasureChange}>
+                </input>
+                <span>B/Measure</span>
+              </div>
             </div>
-            <div className="range-container">
-              <input
-                type="range"
-                className="range"
-                min="20"
-                max="2000"
-                step="1"
-                value={frqBeat}
-                onChange={this.frqBeatChange}
-              />
-            </div>
+
             <div>
-              <input type="text" value={frqBeat} onChange={this.frqBeatChange}></input>
-              <span>Beat Frq</span>
+              increase by <input type="text" value={increaseBpm} onChange={this.increaseBpmChange} /> bpm <br />
+              every <input type="text" value={increaseAtMeasure} onChange={this.increaseAtMeasureChange} /> measure
+          </div>
+            <div className="frequency-container">
+              <div className="range-container">
+                <input
+                  type="range"
+                  className="range"
+                  min="20"
+                  max="2000"
+                  step="1"
+                  value={frqMain}
+                  onChange={this.frqMainChange}
+                />
+              </div>
+              <div>
+                <input type="text" value={frqMain} onChange={this.frqMainChange}></input>
+                <span>First Beat Frq</span>
+              </div>
+              <div className="range-container">
+                <input
+                  type="range"
+                  className="range"
+                  min="20"
+                  max="2000"
+                  step="1"
+                  value={frqBeat}
+                  onChange={this.frqBeatChange}
+                />
+              </div>
+              <div>
+                <input type="text" value={frqBeat} onChange={this.frqBeatChange}></input>
+                <span>Beat Frq</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
     );
 
   }

@@ -16,7 +16,7 @@
     width: 100%;
     border-radius: 10px;
     margin: 70px auto 15px auto;
-    height: 10px;
+    height: 18px;
     padding-top: 6px;
     border: 1px solid #CECECE;
 }
@@ -36,7 +36,7 @@ input[type="range"] {
     height: 5px;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb{
     -webkit-appearance: none;
     position: relative;
     top: 0px;
@@ -48,12 +48,20 @@ input[type="range"]::-webkit-slider-thumb {
     border: 1px solid #CECECE;
 }
 
+input[type=range]::-moz-range-thumb {
+    background: var(--primary-color);
+    width: 35px;
+    height: 35px;
+    border-radius: 40px;
+    border: 1px solid #CECECE;
+  }
+
 input[type="text"] {
     outline: 0;
     font-size: 2.5rem;
     margin: 5px;
     padding: 10px;
-    width: 70px;
+    width: 95px;
     border-radius: 10px;
     border: 2px solid var(--primary-color);
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.4);

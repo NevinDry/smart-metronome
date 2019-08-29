@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './assets/logo.svg';
 import './App.scss';
 import Metronome from './metronome/Metronome';
 import MobileDialog from './dialog/MobileDialog'
@@ -38,10 +37,7 @@ class App extends Component {
     return (
       <div>
         <div className="App">
-          {dialog}
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-          </header>
+          {dialog}     
           <Metronome />
         </div>
         <MobileToast show={this.state.updateToast} />
