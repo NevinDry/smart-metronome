@@ -1,3 +1,13 @@
+## Intro
+
+Smart Metronome is a progressive web app written with React.
+
+The purpose of this app is to provide a reliable, simple metronome for your music training sessions.
+
+The challenge was to create a high timing precision using javascript running in a browser, to do that I implemented Web Workers to perform multi-threading and the javascript Web Audio API for precise timing.
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
