@@ -9,7 +9,7 @@ class MeasureVisualiser extends Component {
 
 
         for(let i = 0; i < 4; i++){
-            if(this.props.measureCount % this.props.measurePerCycle === i){
+            if(this.props.currentMesure % this.props.measurePerCycle === i){
                 measures.push(<div className="full-circle" key={i}></div>);
             }else{
                 measures.push(<div className="empty-circle" key={i}></div>);

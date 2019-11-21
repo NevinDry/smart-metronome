@@ -9,17 +9,16 @@ class Metronome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      running: false,
-      bpm: 90,
-      playIntervalBeats: true,
-      measureCount: 0,
-      measurePerCycle: 4
+      running: false, // is the metronome running ?
+      bpm: 90, // Battement per minute value for the metronome
+      currentMesure: 0, // how many mesure did we played ?
+      measurePerCycle: 4 // How many mesure in a cycle (used for visual representation)
     };
 
-    this.audioContext = null;
+    this.audioContext = null; 
     this.nextClickTime = 0.0;
-    this.scheduleAheadTime = 0.1;
-    this.metronomeWorker = new WebWorker(metronomeWorker);
+    this.scheduleAheadTime = 0.1; // How far do we want to look ahead in our scheduler
+    this.metronomeWorker = new WebWorker(metronomeWorker); // initialising the MetronomeWorker with Webworker
     this.osc = null;
   }
 
@@ -60,7 +59,7 @@ class Metronome extends Component {
       <div>
 
         <div className="metronome">
-          <MeasureVisualiser measureCount={this.state.measureCount} measurePerCycle={this.state.measurePerCycle} ></MeasureVisualiser>
+          <MeasureVisualiser currentMesure={this.state.currentMesure} measurePerCycle={this.state.measurePerCycle} ></MeasureVisualiser>
 
           <button onClick={this.startStop} className={btnClass}>{btnText}</button>
 
@@ -118,6 +117,7 @@ class Metronome extends Component {
 
   // this function will look ahead of time to schedule a click for perfect timing and will update the time for the click 
   scheduler = () => {
+    console.log(this.audioContext.currentTime + this.scheduleAheadTime);
     while (this.nextClickTime < this.audioContext.currentTime + this.scheduleAheadTime) {
       this.scheduleClick();
       this.nextClick();
