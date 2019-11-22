@@ -9,7 +9,7 @@ class BounceVisualiser extends Component {
             <header className="App-header">
                 <img 
                 style={{ 
-                    'transform': 'rotate(' + (this.props.beatNumber * (360/this.props.measureQuantity)) + 'deg)',
+                    'transform': 'rotate(' + (this.props.currentMeasure * (360/this.props.measureQuantity)) + 'deg)',
                     'transitionDuration':  this.props.animationDuration + "s",
                     'WebkitTransitionDuration':  this.props.animationDuration + "s"
                 }}

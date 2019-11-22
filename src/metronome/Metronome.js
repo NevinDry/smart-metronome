@@ -17,8 +17,8 @@ class Metronome extends Component {
       beatSlashMeasure: 4,
       playIntervalBeats: true,
       increaseBpm: 0,
-      increaseAtMeasure: 4,
-      measureCount: 0
+      cycleLength: 4,
+      currentMeasure: 0
     };
 
     this.audioContext = null;
@@ -27,47 +27,6 @@ class Metronome extends Component {
     this.currentBeat = 0;
     this.metronomeWorker = new WebWorker(metronomeWorker);
     this.osc = null;
-  }
-
-  nextClick = () => {
-    // Adjusting time using number of beat per measure and bpm
-    this.nextClickTime += ((100 / this.state.beatSlashMeasure) / 100) * (60.0 / this.state.bpm);
-
-    this.currentBeat++;
-    if (this.currentBeat === this.state.beatSlashMeasure) {
-      this.setState({ measureCount: this.state.measureCount + 1 });
-
-      if (this.state.measureCount % this.state.increaseAtMeasure === 0) {
-        const increaseBy = this.state.bpm + this.state.increaseBpm;
-        this.setState({ bpm: increaseBy });
-      }
-
-      this.currentBeat = 0;
-    }
-  }
-
-  playClick = () => {
-    this.osc = this.audioContext.createOscillator();
-    this.osc.connect(this.audioContext.destination);
-    let isFirstBeatMesure = this.currentBeat % this.state.beatSlashMeasure === 0;
-
-    if (isFirstBeatMesure) {
-      this.osc.frequency.value = this.state.frqMain;
-    } else if (this.state.playIntervalBeats) {
-      this.osc.frequency.value = this.state.frqBeat;
-    }
-
-    if (this.state.playIntervalBeats || isFirstBeatMesure) {
-      this.osc.start(this.nextClickTime);
-      this.osc.stop(this.nextClickTime + 0.05);
-    }
-  }
-
-  scheduler = () => {
-    while (this.nextClickTime < this.audioContext.currentTime + this.scheduleAheadTime) {
-      this.playClick();
-      this.nextClick();
-    }
   }
 
   componentDidMount = () => {
@@ -82,11 +41,9 @@ class Metronome extends Component {
       if (e.data === "click") {
         this.scheduler();
       }
-      else
-        console.log("worker message: " + e.data);
     };
 
-    this.metronomeWorker.postMessage({ "interval": (100 / this.state.beatSlashMeasure) });
+    this.metronomeWorker.postMessage({ "interval": 25 });
   };
 
   render() {
@@ -101,15 +58,15 @@ class Metronome extends Component {
       btnText = "Start";
     }
 
-    const { bpm, beatSlashMeasure, playIntervalBeats, increaseBpm, increaseAtMeasure, frqMain, frqBeat } = this.state;
+    const { bpm, beatSlashMeasure, playIntervalBeats, increaseBpm, cycleLength, frqMain, frqBeat } = this.state;
 
     return (
       <div>
-        <BounceVisualiser beatNumber={this.state.measureCount} animationDuration={(60.0 / this.state.bpm)} measureQuantity={this.state.increaseAtMeasure} />
+        <BounceVisualiser currentMeasure={this.state.currentMeasure} animationDuration={(60.0 / this.state.bpm)} measureQuantity={this.state.cycleLength} />
 
         <div className="metronome">
 
-          <MeasureVisualiser measureLength={this.state.increaseAtMeasure} measureCount={this.state.measureCount}></MeasureVisualiser>
+          <MeasureVisualiser cycleLength={this.state.cycleLength} currentMeasure={this.state.currentMeasure}></MeasureVisualiser>
 
           <button onClick={this.startStop} className={btnClass}>{btnText}</button>
 
@@ -149,7 +106,7 @@ class Metronome extends Component {
 
             <div>
               increase by <input type="text" value={increaseBpm} onChange={this.increaseBpmChange} /> bpm <br />
-              every <input type="text" value={increaseAtMeasure} onChange={this.increaseAtMeasureChange} /> measure
+              every <input type="text" value={cycleLength} onChange={this.cycleLengthChange} /> measure
           </div>
             <div className="frequency-container">
               <div className="range-container">
@@ -208,11 +165,52 @@ class Metronome extends Component {
 
     if (running) {
       this.currentBeat = 0;
-      this.setState({ measureCount: 0 });
-      this.nextClickTime = this.audioContext.currentTime;
+      this.setState({ currentMeasure: 0 });
+      this.nextClickTime = this.audioContext.currentTime + 0.1;
       this.metronomeWorker.postMessage("start");
     } else {
       this.metronomeWorker.postMessage("stop");
+    }
+  }
+
+  scheduler = () => {
+    while (this.nextClickTime < this.audioContext.currentTime + this.scheduleAheadTime) {
+      this.playClick();
+      this.nextClick();
+    }
+  }
+
+  playClick = () => {
+    this.osc = this.audioContext.createOscillator();
+    this.osc.connect(this.audioContext.destination);
+    let isFirstBeatMesure = this.currentBeat % this.state.beatSlashMeasure === 0;
+
+    if (isFirstBeatMesure) {
+      this.osc.frequency.value = this.state.frqMain;
+    } else if (this.state.playIntervalBeats) {
+      this.osc.frequency.value = this.state.frqBeat;
+    }
+
+    if (this.state.playIntervalBeats || isFirstBeatMesure) {
+      this.osc.start(this.nextClickTime);
+      this.osc.stop(this.nextClickTime + 0.05);
+    }
+  }
+
+  nextClick = () => {
+    // Adjusting time using number of beat per measure and bpm
+    this.nextClickTime += ((100 / this.state.beatSlashMeasure) / 100) * (60.0 / this.state.bpm);
+
+    this.currentBeat++;
+    if (this.currentBeat === this.state.beatSlashMeasure) {
+      this.setState({ currentMeasure: this.state.currentMeasure + 1 });
+
+      if (this.state.currentMeasure % this.state.cycleLength === 0) {
+        const increaseBy = this.state.bpm + this.state.increaseBpm;
+        this.setState({ bpm: increaseBy });
+      }
+
+      this.currentBeat = 0;
     }
   }
 
@@ -237,9 +235,9 @@ class Metronome extends Component {
     this.setState({ increaseBpm });
   }
 
-  increaseAtMeasureChange = (event) => {
-    const increaseAtMeasure = +event.target.value;
-    this.setState({ increaseAtMeasure });
+  cycleLengthChange = (event) => {
+    const cycleLength = +event.target.value;
+    this.setState({ cycleLength });
   }
 
   frqMainChange = (event) => {
