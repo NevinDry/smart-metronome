@@ -1,7 +1,7 @@
 export default () => {
 
     var timerID = null;
-    var interval = 100;
+    var interval = null;
 
     self.addEventListener('message', e => { /* eslint-disable-line no-restricted-globals */
         if (e.data === "start") {
@@ -9,13 +9,7 @@ export default () => {
                 postMessage("click");
             }, interval)
         } else if (e.data.interval) {
-            interval = e.data.interval;
-            if (timerID) {
-                clearInterval(timerID);
-                timerID = setInterval(function () {
-                    postMessage("click");
-                }, interval)
-            }
+            interval = e.data.interval;         
         } else if (e.data === "stop") {
             clearInterval(timerID);
             timerID = null;
