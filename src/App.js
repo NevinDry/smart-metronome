@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import './App.scss';
 import Metronome from './metronome/Metronome';
-import MobileDialog from './dialog/MobileDialog'
-import MobileToast from './toast/MobileToast'
-import MobileIosInstallMessage from './installMessage/MobileIosInstallMessage';
 
 class App extends Component {
   constructor(props) {
@@ -15,33 +12,14 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    // Listening to ServiceWorker event for PWA update integration
-    window.addEventListener('update', (e) => {
-      this.setState({ updateToast: true });
-    }, false);
   }
 
   render() {
-    // Preparing for IOS PWA integration
-    let iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-    let dialog;
-    let instaMessage;
-    if (iOS) {
-      dialog = (<MobileDialog />);
-      //checking if app is installed or not
-      if (!window.navigator.standalone) {
-        instaMessage = (<MobileIosInstallMessage />);
-      }
-    }
-
     return (
       <div>
         <div className="App">
-          {dialog}     
           <Metronome />
         </div>
-        <MobileToast show={this.state.updateToast} />
-        {instaMessage}
       </div>
 
     );
